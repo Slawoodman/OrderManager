@@ -1,0 +1,30 @@
+{% if page %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Order Status</title>
+</head>
+<body>
+    <h1>Change Order Status</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            {% for choice in order.STATUS_CHOICES %}
+                <option value="{{ choice.0 }}" {% if choice.0 == order.status %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <input type="submit" value="Update Status">
+    </form>
+</body>
+</html>
+{% else %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <input value="submit" type="submit">
+</form>
+{%endif%}

@@ -1,0 +1,83 @@
+{% extends "main.html" %}
+{% block content %}
+<section>
+    
+    {% if orders %}
+    <form method="GET" action="">
+      {% if request.user.role == 'BOOKER' %}
+        <label for="from">From:</label>
+        <input type="date" id="from" name="from">
+      
+        <label for="to">To:</label>
+        <input type="date" id="to" name="to">
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+          <option value="">All</option>
+          <option value="U">Undecided</option>
+          <option value="P">Paid</option>
+          <option value="C">Completed</option>
+          <!-- Add more options for other statuses -->
+        </select>
+      {% else %}
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+          <option value="">All</option>
+          <option value="U">Undecided</option>
+          <option value="P">Paid</option>
+          <option value="C">Completed</option>
+          <!-- Add more options for other statuses -->
+        </select>
+      {% endif %}
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Date Created</th>
+            <th>Status</th>
+            {% if request.user.is_superuser %}
+            <th>Change status</th>
+            <th>Gen bill</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.product }}</td>
+            <td>{{ order.price }}</td>
+            <td>{{ order.created }}</td>
+            {% if order.status == 'Undecided' and not request.user.is_superuser %}
+               <td><a href="{% url 'checkout' pk=order.id%}">{{order.status}}</a></td>
+            {% else %}
+                <td><p>{{order.status}}</p></td>
+            {% endif%}
+            {% if request.user.is_superuser %}
+              <th><a href="{% url 'change_order_status' pk=order.id %}">Change</a></th>
+              {% if order.file %}
+              <th><a href="{% url 'genpayment' pk=order.id %}">Recreate payment bill</a></th>
+              {% else %}
+              <th><a href="{% url 'genpayment' pk=order.id %}">Create payment bill</a></th>
+              {% endif %}
+            <!-- и конечный заказа обработь тоже -->
+            {%elif order.status == 'Paid' and  order.file %}
+              <th><a href="{% url 'view_html' pk=order.id %}">Download paymentbill</a></th>
+            {%elif order.status == 'Completed' and  order.file %}
+              <th><p>U'r order completed. <a href="{% url 'view_html' pk=order.id %}">Download paymentbill</a></p></th>
+            {% else %}
+              <th>Wait till admin check the bill</th>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+    {% else %}
+        <h1>
+            there is not oreds
+        </h1>
+    {% endif %}
+</section>
+{% endblock %}
