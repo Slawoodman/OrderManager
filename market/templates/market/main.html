@@ -27,7 +27,7 @@
                             {% endif %}
                         </li>
                     <li>Added: {{product.created}}</li>
-                    {% if not request.user.is_superuser %}
+                    {% if request.user.role == 'USER'%}
                     <a href="{% url 'user-order' pk=product.id%}">Buy</a>
                     {% endif %}
                     <hr>

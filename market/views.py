@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import Product, OrderItem
 from .forms import OrderCreatForm
+from .utils import get_choices, filter_orders
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import user_passes_test
@@ -15,16 +16,16 @@ def mainpage(request):
     return render(request, "market/main.html", context)
 
 
-def get_orders(request):
-    if request.user.is_superuser:
-        orders = OrderItem.objects.all()
-    else:
-        orders = OrderItem.objects.filter(customer=request.user)
 
+def get_orders(request):
+    data  = OrderItem.objects.all()
+    orders = filter_orders(request, data)
+   
     context = {"orders": orders}
     return render(request, "market/order_list.html", context)
 
 
+@login_required(login_url="login")
 def createUserOrder(request, pk):
     item = Product.objects.get(id=pk)
     if request.method == "POST":
@@ -43,14 +44,14 @@ def createUserOrder(request, pk):
 
 def mark_order_item_as_paid(request, pk):
     order_item = get_object_or_404(OrderItem, id=pk)
-    order_item.mark_as_paid()
+    order_item.paid()
     return redirect("showorders")
 
 
-@user_passes_test(lambda u: u.is_superuser)  # u in ['groups']
+
 def change_order_status(request, pk):
     order = get_object_or_404(OrderItem, id=pk)
-
+    choices = get_choices(request, order)
     if request.method == "POST":
         status = request.POST.get("status")
         if status in dict(OrderItem.STATUS_CHOICES):
@@ -60,26 +61,8 @@ def change_order_status(request, pk):
         else:
             return HttpResponse("Wrong value")
 
-    return render(request, "market/order_form.html", {"order": order, "page": "edit"})
-
-
-def filter_orders(request):
-    from_date = request.GET.get("from")
-    to_date = request.GET.get("to")
-    status = request.GET.get("status")
-
-    orders = OrderItem.objects.all()
-
-    if from_date and to_date:
-        orders = orders.filter(created__range=[from_date, to_date])
-
-    if status:
-        orders = orders.filter(status=status)
-
-    orders = orders.order_by("created", "status")
-
-    context = {"orders": orders}
-    return render(request, "market/order_list.html", context)
+    context = {"order": order, "page": "edit", "choices": choices}
+    return render(request, "market/order_form.html", context)
 
 
 def generate_payment_html(request, pk):

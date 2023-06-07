@@ -49,7 +49,7 @@ class OrderItem(models.Model):
     )
     customer = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     file = models.FileField(default="", null=True, blank=True)
-    # is_paid = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False, null=True, blank=True)
 
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default="Undecided"
