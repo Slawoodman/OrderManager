@@ -16,11 +16,10 @@ def mainpage(request):
     return render(request, "market/main.html", context)
 
 
-
 def get_orders(request):
-    data  = OrderItem.objects.all()
+    data = OrderItem.objects.all()
     orders = filter_orders(request, data)
-   
+
     context = {"orders": orders}
     return render(request, "market/order_list.html", context)
 
@@ -46,7 +45,6 @@ def mark_order_item_as_paid(request, pk):
     order_item = get_object_or_404(OrderItem, id=pk)
     order_item.paid()
     return redirect("showorders")
-
 
 
 def change_order_status(request, pk):

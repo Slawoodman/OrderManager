@@ -1,5 +1,6 @@
 from django.db.models import Q
 
+
 def get_choices(request, order):
     role = request.user.role
     if role == "CASHIER":
@@ -11,14 +12,12 @@ def get_choices(request, order):
     return choices
 
 
-
 def filter_orders(request, queryset):
     from_date = request.GET.get("from")
     to_date = request.GET.get("to")
     status = request.GET.get("status")
 
     # Base queryset
-    
 
     # Apply filters
     if from_date and to_date:
@@ -32,9 +31,9 @@ def filter_orders(request, queryset):
     q = Q()
 
     if user_role == "CASHIER":
-        q |= Q(status__in=['Undecided', 'Paid'])
+        q |= Q(status__in=["Undecided", "Paid"])
     elif user_role == "CONSULTANT":
-        q |= Q(status__in=['Paid', 'Completed'])
+        q |= Q(status__in=["Paid", "Completed"])
     elif user_role == "USER":
         q |= Q(customer=request.user)
 
