@@ -2,9 +2,11 @@
 
 {% block content %}
 <section>
-    <h1>It's a list of available products. Hope you'll find what you're looking for.</h1>
+    
 </section>
 <section>
+    {% if products %}
+    <h1>It's a list of available products. Hope you'll find what you're looking for.</h1>
     <div class="product-list">
         {% for product in products %}
         <div class="product-item">
@@ -25,6 +27,10 @@
             {% endif %}
         </div>
         {% endfor %}
+       
     </div>
+    {% else %}
+        <h1>No products yet...</h1>
+    {% endif %} 
 </section>
 {% endblock %}

@@ -28,7 +28,6 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 
-# продукт цена, юзера айди, статутс.
 class OrderItem(models.Model):
     STATUS_CHOICES = (
         ("Undecided", "UNDECIDED"),
@@ -38,9 +37,9 @@ class OrderItem(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    address = models.CharField(max_length=250, blank=True, null=True)
-    postal_code = models.CharField(max_length=20, blank=True, null=True)
-    city = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=250, default="")
+    postal_code = models.CharField(max_length=20, default="")
+    city = models.CharField(max_length=100, default="")
     created = models.DateTimeField(
         auto_now_add=False, blank=True, null=True, default=timezone.now
     )
