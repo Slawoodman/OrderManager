@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static 'styles/main.css'%}">
 </head>
 {% block content %}
 <body>
@@ -22,6 +24,10 @@
       <li><a href="{% url 'logout' %}">Logout</a></li>
       {% else %}
       <li><a href="{% url 'login' %}">Login/Sign Up</a></li>
+      {% endif %}
+      <li><a href="{% url 'docs' %}">Documentation</a></li>
+      {% if request.user.is_authenticated %}
+      <p class="navbar-text navbar-left-text">Hey, {{ request.user }} your role is {{ request.user.role }}</p>
       {% endif %}
     </ul>
   </div>

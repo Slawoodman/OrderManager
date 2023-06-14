@@ -2,15 +2,15 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path("", views.mainpage, name="main"),
-    path("order/<str:pk>", views.createUserOrder, name="user-order"),
-    path("orders/", views.get_orders, name="showorders"),
-    path("checkout/<int:pk>", views.mark_order_item_as_paid, name="checkout"),
-    path("payment/<int:pk>", views.generate_payment_html, name="genpayment"),
-    path("download_file/<int:pk>", views.download_file, name="view_html"),
+    path("", views.MainPageView.as_view(), name="main"),
+    path("order/<str:pk>", views.CreateUserOrderView.as_view(), name="user-order"),
+    path("orders/", views.GetOrdersView.as_view(), name="showorders"),
+    path("checkout/<int:pk>", views.MarkOrderItemAsPaidView.as_view(), name="checkout"),
+    path("payment/<int:pk>", views.GeneratePaymentHtmlView.as_view(), name="genpayment"),
+    path("download_file/<int:pk>", views.DownloadFileView.as_view(), name="view_html"),
     path(
         "orders/<int:pk>/change_status/",
-        views.change_order_status,
-        name="change_order_status",
+        views.ChangeOrderStatusView.as_view(),
+        name="change_status",
     ),
 ]

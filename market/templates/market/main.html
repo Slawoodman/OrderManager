@@ -1,40 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
-</head>
 {% extends "main.html" %}
-<body>
-    {% block content %}
-    <section>
-        <h1>{{request.user}} is loginede and u'r role is {{request.user.role}} </h1>
-    </section>
-    <section>
-        <div>
-            {% for product  in products %}
-                <ul>
-                    <li>Name: {{product.name}}</li>
-                        <li>
-                            {% if  product.discounted_price %}
-                                <span><s>Price: {{product.price}}</s> {{product.discounted_price}}</span>
-                            {% else %}
-                                <span>Price: {{product.price}}</span>
-                            {% endif %}
-                        </li>
-                    <li>Added: {{product.created}}</li>
-                    {% if request.user.role == 'USER'%}
-                    <a href="{% url 'user-order' pk=product.id%}">Buy</a>
+
+{% block content %}
+<section>
+    <h1>It's a list of available products. Hope you'll find what you're looking for.</h1>
+</section>
+<section>
+    <div class="product-list">
+        {% for product in products %}
+        <div class="product-item">
+            <h2>{{ product.name }}</h2>
+            <ul>
+                <li>
+                    {% if product.discounted_price %}
+                    <span class="original-price">Price: {{ product.price }}</span>
+                    <span class="discounted-price">{{ product.discounted_price }}</span>
+                    {% else %}
+                    <span class="price">Price: {{ product.price }}</span>
                     {% endif %}
-                    <hr>
-                </ul>
-            {% endfor %}
+                </li>
+                <li>Added: {{ product.created }}</li>
+            </ul>
+            {% if request.user.role == 'USER' %}
+            <a href="{% url 'user-order' pk=product.id %}" class="buy-button">Buy</a>
+            {% endif %}
         </div>
-    </section>
-    {% endblock %}
-</body>
-</html>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

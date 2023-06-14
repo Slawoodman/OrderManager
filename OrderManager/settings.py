@@ -37,15 +37,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "market.apps.MarketConfig",
     "rest_framework",
-    "users",
+    "drf_spectacular",
+    "market.apps.MarketConfig",
+    "users.apps.UsersConfig",
+    
 ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+        
+    ),
+    "DEFAULT_SCHEMA_CLASS": 
+        "drf_spectacular.openapi.AutoSchema",
 }
 
 MIDDLEWARE = [
@@ -60,6 +65,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "OrderManager.urls"
 AUTH_USER_MODEL = "users.User"
+LOGIN_URL = '/user/login/'
 
 TEMPLATES = [
     {
@@ -137,3 +143,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+SPECTACULAR_SETTINGS = {"TITLE": "Django DRF OrderManager"}
