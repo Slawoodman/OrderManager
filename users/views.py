@@ -7,6 +7,7 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm
 from .models import User
 
+
 # Class based view to handle user login
 class LoginUserView(View):
     # Function to handle HTTP GET requests. It renders the login page.
@@ -18,9 +19,9 @@ class LoginUserView(View):
         if request.user.is_authenticated:
             return redirect("main")
 
-        # Define context variables that are passed to the template. 
+        # Define context variables that are passed to the template.
         context = {"page": page}
-        
+
         # Render the 'login_reg.html' template, passing in the context
         return render(request, "users/login_reg.html", context)
 
@@ -65,13 +66,13 @@ class RegisterUserView(View):
     def get(self, request):
         # Set the page variable to 'register'
         page = "register"
-        
+
         # Initialize the form for user registration.
         form = CustomUserCreationForm()
-        
-        # Define context variables that are passed to the template. 
+
+        # Define context variables that are passed to the template.
         context = {"page": page, "form": form}
-        
+
         # Render the 'login_reg.html' template, passing in the context.
         return render(request, "users/login_reg.html", context)
 
@@ -79,7 +80,7 @@ class RegisterUserView(View):
     def post(self, request):
         # Set the page variable to 'register'
         page = "register"
-        
+
         # Initialize the registration form with the data received from the user.
         form = CustomUserCreationForm(request.POST)
 
@@ -87,16 +88,16 @@ class RegisterUserView(View):
         if form.is_valid():
             # If the form data is valid, create a new user instance but don't save it to the database yet.
             user = form.save(commit=False)
-            
+
             # Convert the username to lowercase.
             user.username = user.username.lower()
-            
+
             # Now save the user instance into the database.
             user.save()
 
             # Display a success message.
             messages.success(request, "User account was successfully created")
-            
+
             # Log the user in and redirect to the 'main' page.
             login(request, user)
             return redirect("main")
@@ -115,9 +116,9 @@ class LogoutUserView(LoginRequiredMixin, View):
     def get(self, request):
         # Log out the user.
         logout(request)
-        
+
         # Display a success message.
         messages.success(request, "User was logged out")
-        
+
         # Redirect to the 'main' page.
         return redirect("main")
