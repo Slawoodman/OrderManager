@@ -25,3 +25,5 @@
 
   **python3 manage.py runserver**
 
+[Postman collection]([URL](https://restless-sunset-879674.postman.co/workspace/OrderManager~fc2a6f7a-efcb-4db8-8bdf-88826309ebc9/overview)https://restless-sunset-879674.postman.co/workspace/OrderManager~fc2a6f7a-efcb-4db8-8bdf-88826309ebc9/overview)
+
