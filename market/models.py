@@ -54,7 +54,7 @@ class OrderItem(models.Model):
         max_length=10, choices=STATUS_CHOICES, default="Undecided"
     )
 
-    # сделать саттус по кнопке типа добалили това и тд можно его там в опалаченый, в обрботке, завершеный
+    
 
     def __str__(self):
         return "{}".format(self.id)
@@ -71,5 +71,5 @@ class OrderItem(models.Model):
         self.save()
 
     def mark_as_paid(self):
-        self.status = "Paid"  # Set the status to 'Completed'
-        self.save()  # Save the updated order item
+        self.status = "Paid" 
+        self.save()  
