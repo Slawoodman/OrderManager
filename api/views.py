@@ -199,6 +199,17 @@ class CreateOrderAPIView(APIView):
         """,
         responses={201: "New order created successfully!"},
         tags=["Products"],
+        request={
+            "application/json": {
+                "type": "object",
+                "properties": {
+                    "address": {"type": "string", "example": "U'r address"},
+                    "postal_code": {"type": "string", "example": "U'r postal_code"},
+                    "city": {"type": "string", "example": "U'r city name"},
+                },
+                "required": ["status"],
+            },
+        },
     )
     def post(self, request, pk):
         """
@@ -323,17 +334,20 @@ class ChangeOrderStatusAPIView(APIView):
             Parameters:
                 - `pk` (int): The ID of the order.
 
-            Example request body:
-            {
-                "status": "Completed",
-                ...
-            }
-
             Example response:
-                "Order status updated successfully.
+            {
+                "detail": "Order status updated successfully."
+            }
         """,
         responses={200: "Order status updated successfully."},
         tags=["Orders"],
+        request={
+            "application/json": {
+                "type": "object",
+                "properties": {"status": {"type": "string", "example": "Completed"}},
+                "required": ["status"],
+            },
+        },
     )
     def post(self, request, pk):
         """
@@ -347,9 +361,8 @@ class ChangeOrderStatusAPIView(APIView):
             order_item.status = status
             order_item.save()
             return Response(
-                "Order status updated successfully.", status=status.HTTP_200_OK
+                {"detail": "Order status updated successfully."},
             )
         return Response(
-            "Only administrators can change the status of an order.",
-            status=status.HTTP_403_FORBIDDEN,
+            {"detail": "Only administrators can change the status of an order."},
         )

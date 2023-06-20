@@ -3,12 +3,13 @@ from django.urls import reverse
 from users.models import User
 from market.models import Product, OrderItem
 from django.core.management import call_command
-        
+
 
 class MarketTests(TestCase):
-    fixtures = ['products.json']
+    fixtures = ["products.json"]
+
     def setUp(self):
-        call_command('loaddata', 'products.json')
+        call_command("loaddata", "products.json")
         self.client = Client()
         self.user = User.objects.create_user(username="testuser", password="testpass")
         self.product = Product.objects.create(name="Test Product", price=10)
