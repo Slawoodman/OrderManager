@@ -54,11 +54,6 @@ class OrderItem(models.Model):
         max_length=10, choices=STATUS_CHOICES, default="Undecided"
     )
 
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> 609525d9b24f76067c1bf0131fa0e1e5195dc761
     def __str__(self):
         return "{}".format(self.id)
 
@@ -74,10 +69,6 @@ class OrderItem(models.Model):
         self.save()
 
     def mark_as_paid(self):
-<<<<<<< HEAD
         self.status = "Paid"
         self.save()
-=======
-        self.status = "Paid" 
-        self.save()  
->>>>>>> 609525d9b24f76067c1bf0131fa0e1e5195dc761
+
