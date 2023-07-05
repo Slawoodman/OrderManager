@@ -18,15 +18,21 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
     def save(self, *args, **kwargs):
+        self.make_sale
+        print(self.discounted_price)
+        super().save(*args, **kwargs)
+
+
+    @property
+    def make_sale(self):
         if self.created and self.created.date() < timezone.now().date() - timedelta(
-            days=30
-        ):
+            days=30):
             self.discounted_price = self.price * Decimal(0.8)
         else:
             self.discounted_price = None
-        super().save(*args, **kwargs)
-
+        
 
 class OrderItem(models.Model):
     STATUS_CHOICES = (
@@ -35,7 +41,7 @@ class OrderItem(models.Model):
         ("Completed", "COMPLETED"),
     )
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_item')
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     address = models.CharField(max_length=250, default="")
     postal_code = models.CharField(max_length=20, default="")
@@ -64,11 +70,14 @@ class OrderItem(models.Model):
             self.price = self.product.price
         return super().save(*args, **kwargs)
 
-    def paid(self):
-        self.is_paid = True
-        self.save()
 
-    def mark_as_paid(self):
-        self.status = "Paid"
-        self.save()
+    def status_to_pading(self):
+        if self.customer.role == 'CASHIER':
+            self.status = "Paid"
+            self.save()
+        else:
+            self.is_paid = True
+            self.save()
+        
+        
 

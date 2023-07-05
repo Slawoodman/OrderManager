@@ -93,7 +93,7 @@ class MarkOrderItemAsPaidView(LoginRequiredMixin, View):
         order_item = get_object_or_404(OrderItem, id=pk)
 
         # Mark the order item as paid
-        order_item.paid()
+        order_item.status_to_pading()
 
         # Redirect to the 'showorders' page.
         return redirect("showorders")

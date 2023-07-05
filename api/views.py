@@ -267,7 +267,7 @@ class OrderPaymentAPIView(APIView):
 
         if role == User.Role.USER and order_item.customer == user:
             try:
-                order_item.paid()
+                order_item.status_to_pading()
                 return Response("Payment successful.", status=status.HTTP_200_OK)
             except:
                 return Response(
